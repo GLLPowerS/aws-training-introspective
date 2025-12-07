@@ -4,6 +4,6 @@ Content-Type: application/json
 
 {
     "id": "12345",
-    "name": "Sample Product",
+    "name": "Other Product",
     "price": 19.99
 }

@@ -1,11 +1,12 @@
+import os
 from typing import Any, Dict, List
 
 from fastapi import FastAPI
 
 app = FastAPI(title="Order Service")
 
-TOPIC = "product-events"
-PUBSUB_NAME = "sns-pubsub"
+TOPIC = os.getenv("DAPR_PUBSUB_TOPIC", "product-events")
+PUBSUB_NAME = os.getenv("DAPR_PUBSUB_NAME", "redis-pubsub")
 
 
 @app.get("/healthz")

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+  namespace: introspect
+  labels:
+    app: product-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "product-service"
+        dapr.io/app-port: "8000"
+        dapr.io/app-protocol: "http"
+    spec:
+      serviceAccountName: product-service-sa
+      containers:
+        - name: product-service
+          image: product-service:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DAPR_PUBSUB_NAME
+              value: redis-pubsub
+            - name: DAPR_PUBSUB_TOPIC
+              value: product-events
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+  namespace: introspect
+  labels:
+    app: product-service
+spec:
+  selector:
+    app: product-service
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP

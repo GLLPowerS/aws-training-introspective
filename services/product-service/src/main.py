@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException
 app = FastAPI(title="Product Service")
 
 DAPR_HTTP_PORT = os.getenv("DAPR_HTTP_PORT", "3500")
-PUBSUB_NAME = os.getenv("DAPR_PUBSUB_NAME", "sns-pubsub")
+PUBSUB_NAME = os.getenv("DAPR_PUBSUB_NAME", "redis-pubsub")
 TOPIC = os.getenv("DAPR_PUBSUB_TOPIC", "product-events")
 DAPR_BASE_URL = f"http://127.0.0.1:{DAPR_HTTP_PORT}/v1.0"
 
