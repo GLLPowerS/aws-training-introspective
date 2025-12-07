@@ -1,2 +1,0 @@
-# aws-training-introspective
-Changes
