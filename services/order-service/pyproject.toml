@@ -1,7 +1,7 @@
 [project]
-name = "orders-api"
+name = "order-service"
 version = "0.1.0"
-description = "Orders service"
+description = "Subscribes to product events via Dapr pub/sub"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

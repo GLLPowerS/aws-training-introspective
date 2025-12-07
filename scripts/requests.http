@@ -1,0 +1,9 @@
+###
+POST http://localhost:3500/v1.0/publish/redis-pubsub/product-events
+Content-Type: application/json
+
+{
+    "id": "12345",
+    "name": "Sample Product",
+    "price": 19.99
+}

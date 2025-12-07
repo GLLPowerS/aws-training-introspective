@@ -1,0 +1,28 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: sns-pubsub
+  namespace: introspect
+spec:
+  type: pubsub.aws.snssqs
+  version: v1
+  metadata:
+    - name: region
+      value: "${AWS_REGION:-us-east-1}"
+    - name: topic
+      value: product-events
+    - name: consumerID
+      value: order-service
+    - name: decodeBase64
+      value: "true"
+    - name: disableEntityManagement
+      value: "true"
+    - name: queueName
+      value: product-events-queue
+    - name: rawMessageDelivery
+      value: "true"
+  scopes:
+    - product-service
+    - order-service
+  auth:
+    secretStore: kubernetes

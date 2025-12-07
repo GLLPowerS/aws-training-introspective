@@ -1,0 +1,22 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: redis-pubsub
+  namespace: introspect
+spec:
+  type: pubsub.redis
+  version: v1
+  metadata:
+    - name: redisHost
+      value: localhost:6379
+    - name: redisDB
+      value: 0
+    - name: enableTLS
+      value: "false"
+    - name: maxRetries
+      value: "5"
+    - name: processingTimeout
+      value: 60s
+  scopes:
+    - product-service
+    - order-service
