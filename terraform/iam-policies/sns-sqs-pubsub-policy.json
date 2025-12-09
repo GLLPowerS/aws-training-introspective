@@ -1,0 +1,20 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sns:Publish",
+                "sqs:SendMessage",
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl"
+            ],
+            "Resource": [
+                "arn:aws:sns:us-east-1:139592182912:product-events",
+                "arn:aws:sqs:us-east-1:139592182912:product-events-queue"
+            ]
+        }
+    ]
+}
