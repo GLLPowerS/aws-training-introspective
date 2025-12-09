@@ -1,0 +1,19 @@
+resource "kubernetes_manifest" "gp3_csi_default" {
+  manifest = {
+    apiVersion = "storage.k8s.io/v1"
+    kind       = "StorageClass"
+    metadata = {
+      name = "gp3-csi"
+      annotations = {
+        "storageclass.kubernetes.io/is-default-class" = "true"
+      }
+    }
+    provisioner       = "ebs.csi.aws.com"
+    volumeBindingMode = "WaitForFirstConsumer"
+    parameters = {
+      type = "gp3"
+    }
+  }
+
+  depends_on = [module.eks]
+}

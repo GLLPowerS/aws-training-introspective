@@ -19,6 +19,7 @@ spec:
         dapr.io/app-id: "order-service"
         dapr.io/app-port: "8000"
         dapr.io/app-protocol: "http"
+        dapr.io/config: "appconfig"
     spec:
       serviceAccountName: order-service-sa
       containers:
@@ -29,7 +30,7 @@ spec:
             - containerPort: 8000
           env:
             - name: PUBSUB_NAME
-              value: redis-pubsub
+              value: sns-sqs-pubsub
 ---
 apiVersion: v1
 kind: Service

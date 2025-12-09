@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: introspect
+resources:
+  - ../base
+  - ../local/product-service.yaml
+  - ../local/order-service.yaml
+  - ../../dapr/components/pubsub-sns-sqs.yaml
+
+images:
+  - name: product-service
+    newName: 139592182912.dkr.ecr.us-east-1.amazonaws.com/product-service
+    newTag: latest
+  - name: order-service
+    newName: 139592182912.dkr.ecr.us-east-1.amazonaws.com/order-service
+    newTag: latest

@@ -19,6 +19,7 @@ spec:
         dapr.io/app-id: "product-service"
         dapr.io/app-port: "8000"
         dapr.io/app-protocol: "http"
+        dapr.io/config: "appconfig"
     spec:
       serviceAccountName: product-service-sa
       containers:
@@ -29,7 +30,7 @@ spec:
             - containerPort: 8000
           env:
             - name: DAPR_PUBSUB_NAME
-              value: redis-pubsub
+              value: sns-sqs-pubsub
             - name: DAPR_PUBSUB_TOPIC
               value: product-events
 ---

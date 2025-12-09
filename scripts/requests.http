@@ -1,5 +1,5 @@
 ###
-POST http://localhost:3500/v1.0/publish/redis-pubsub/product-events
+POST http://localhost:3500/v1.0/publish/sns-sqs-pubsub/product-events
 Content-Type: application/json
 
 {
