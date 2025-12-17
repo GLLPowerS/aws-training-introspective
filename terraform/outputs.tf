@@ -47,3 +47,13 @@ output "pubsub_queue_url" {
   value       = try(aws_sqs_queue.pubsub[0].id, null)
   description = "SQS queue URL for Dapr pubsub"
 }
+
+output "fluent_bit_irsa_role_arn" {
+  value       = local.fluent_bit_irsa_role_arn
+  description = "IRSA role ARN for aws-for-fluent-bit (CloudWatch Logs shipping)"
+}
+
+output "aws_otel_collector_irsa_role_arn" {
+  value       = local.aws_otel_collector_irsa_role_arn
+  description = "IRSA role ARN for the OpenTelemetry Collector exporting traces to AWS X-Ray"
+}

@@ -98,6 +98,30 @@ variable "order_irsa_role_arn" {
   default     = ""
 }
 
+variable "create_fluent_bit_irsa_role" {
+  description = "Whether to create an IRSA role for aws-for-fluent-bit (CloudWatch Logs shipping)"
+  type        = bool
+  default     = true
+}
+
+variable "fluent_bit_irsa_role_arn" {
+  description = "Existing IRSA role ARN for aws-for-fluent-bit (used when create_fluent_bit_irsa_role=false)"
+  type        = string
+  default     = ""
+}
+
+variable "create_aws_otel_collector_irsa_role" {
+  description = "Whether to create an IRSA role for the OpenTelemetry Collector used to export traces to AWS X-Ray"
+  type        = bool
+  default     = true
+}
+
+variable "aws_otel_collector_irsa_role_arn" {
+  description = "Existing IRSA role ARN for the OpenTelemetry Collector (used when create_aws_otel_collector_irsa_role=false)"
+  type        = string
+  default     = ""
+}
+
 variable "product_service_sa" {
   description = "Service account name for product-service"
   type        = string

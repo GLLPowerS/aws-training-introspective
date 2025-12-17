@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-otel-collector
+  namespace: observability
+  labels:
+    app: aws-otel-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws-otel-collector
+  template:
+    metadata:
+      labels:
+        app: aws-otel-collector
+    spec:
+      serviceAccountName: aws-otel-collector
+      containers:
+        - name: otel-collector
+          image: otel/opentelemetry-collector-contrib:0.104.0
+          args: ["--config=/conf/collector.yaml"]
+          env:
+            - name: AWS_REGION
+              value: us-east-1
+          ports:
+            - name: otlp-grpc
+              containerPort: 4317
+            - name: otlp-http
+              containerPort: 4318
+          volumeMounts:
+            - name: collector-config
+              mountPath: /conf
+      volumes:
+        - name: collector-config
+          configMap:
+            name: aws-otel-collector
