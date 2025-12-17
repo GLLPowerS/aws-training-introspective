@@ -10,25 +10,27 @@ locals {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.0"
+  version = "21.10.1"
 
-  cluster_name    = var.cluster_name
-  cluster_version = "1.29"
+  name               = var.cluster_name
+  kubernetes_version = "1.34"
   enable_irsa     = true
 
   # Allow reaching the API server from outside the VPC (adjust CIDR to your IP for tighter access)
-  cluster_endpoint_public_access  = true
-  cluster_endpoint_private_access = true
-  cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
+  endpoint_public_access       = true
+  endpoint_private_access      = true
+  endpoint_public_access_cidrs = ["0.0.0.0/0"]
 
   # Skip KMS key creation to avoid extra permissions; set to true or supply an existing key if you want secrets encryption.
   create_kms_key = false
-  # Explicitly disable encryption config to avoid provider_key_arn lookups when no KMS key is supplied.
-  cluster_encryption_config = []
+  # Explicitly disable custom encryption config to avoid provider_key_arn lookups when no KMS key is supplied.
+  encryption_config = null
 
   # Avoid creating a log group if one already exists
   # create_cloudwatch_log_group = true
   # cluster_enabled_log_types   = []
+
+  enable_cluster_creator_admin_permissions = true
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
@@ -42,7 +44,15 @@ module "eks" {
     }
   }
 
-  cluster_addons = {
+  addons = {
+    coredns = {}
+    eks-pod-identity-agent = {
+      before_compute = true
+    }
+    kube-proxy = {}
+    vpc-cni = {
+      before_compute = true
+    }
     aws-ebs-csi-driver = {
       most_recent              = true
       service_account_role_arn = module.ebs_csi_irsa.iam_role_arn
@@ -66,6 +76,17 @@ module "eks" {
     }
   }
 
+  node_security_group_additional_rules = {
+    ingress_api_server_4000 = {
+      description              = "Allow ingress to port 4000 from kube apiserver"
+      protocol                 = "tcp"
+      from_port                = 4000
+      to_port                  = 4000
+      type                     = "ingress"
+      source_security_group_id = module.eks.cluster_security_group_id
+    }
+  }
+  
   tags = {
     Project = "introspect"
   }
