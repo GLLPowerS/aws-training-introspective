@@ -16,13 +16,20 @@ variable "cluster_access_entries" {
     principal_arn = string
     policy_arns   = list(string)
   }))
-  default = []
+  default = [{
+     principal_arn="arn:aws:sts::139592182912:federated-user/c04-vlabuser177@stackroute.in",
+     policy_arns=[
+       "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy",
+       "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy",
+       "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
+     ]
+   }]
 }
 
 variable "add_current_caller_access" {
   description = "If true, grant the current AWS caller the access policies in current_caller_policy_arns as a cluster access entry."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "current_caller_policy_arns" {
@@ -76,7 +83,7 @@ variable "serviceaccount_namespace" {
 variable "create_irsa_roles" {
   description = "Whether to create IRSA roles (set false if roles already exist)"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "product_irsa_role_arn" {
@@ -101,4 +108,34 @@ variable "order_service_sa" {
   description = "Service account name for order-service"
   type        = string
   default     = "order-service-sa"
+}
+
+variable "create_pubsub_infra" {
+  description = "Whether to create the SNS topic + SQS queue used by the Dapr SNS/SQS pubsub component."
+  type        = bool
+  default     = true
+}
+
+variable "pubsub_topic_name" {
+  description = "SNS topic name used by the app/Dapr publish+subscribe topic (for example DAPR_PUBSUB_TOPIC=product-events)."
+  type        = string
+  default     = "product-events"
+}
+
+variable "pubsub_queue_name" {
+  description = "SQS queue name used by the subscriber app. For Dapr pubsub.aws.snssqs, this is the runtime consumerID (normally the Dapr app-id, e.g. order-service)."
+  type        = string
+  default     = "order-service"
+}
+
+variable "pubsub_queue_message_retention_seconds" {
+  description = "SQS MessageRetentionPeriod in seconds for the pubsub queue. Must match if the queue already exists (AWS otherwise returns QueueAlreadyExists with different attribute)."
+  type        = number
+  default     = 1209600
+}
+
+variable "pubsub_queue_visibility_timeout_seconds" {
+  description = "SQS VisibilityTimeout in seconds for the pubsub queue. Must match if the queue already exists."
+  type        = number
+  default     = 30
 }

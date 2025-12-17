@@ -12,15 +12,9 @@ spec:
   metadata:
     - name: region
       value: us-east-1
-    - name: topic
-      value: product-events
-    - name: consumerID
-      value: order-service
     - name: decodeBase64
       value: "true"
     - name: disableEntityManagement
       value: "true"
-    - name: queueName
-      value: product-events-queue
     - name: rawMessageDelivery
       value: "true"

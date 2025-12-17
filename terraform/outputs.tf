@@ -32,3 +32,18 @@ output "order_irsa_role_arn" {
   value       = local.order_irsa_arn
   description = "IRSA role ARN for order-service"
 }
+
+output "pubsub_topic_arn" {
+  value       = try(aws_sns_topic.pubsub[0].arn, null)
+  description = "SNS topic ARN for Dapr pubsub (product-events by default)"
+}
+
+output "pubsub_queue_arn" {
+  value       = try(aws_sqs_queue.pubsub[0].arn, null)
+  description = "SQS queue ARN for Dapr pubsub (product-events-queue by default)"
+}
+
+output "pubsub_queue_url" {
+  value       = try(aws_sqs_queue.pubsub[0].id, null)
+  description = "SQS queue URL for Dapr pubsub"
+}

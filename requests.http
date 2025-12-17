@@ -1,0 +1,12 @@
+###
+GET  http://localhost:8000/healthz
+
+###
+POST http://localhost:8000/products
+Content-Type: application/json
+
+{
+    "id": "12345",
+    "name": "Other Product",
+    "price": 19.99
+}

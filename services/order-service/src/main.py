@@ -1,7 +1,7 @@
 import os
 from typing import Any, Dict, List
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 
 app = FastAPI(title="Order Service")
 
@@ -26,6 +26,6 @@ async def dapr_subscribe() -> List[Dict[str, str]]:
 
 
 @app.post("/events/product")
-async def handle_product_event(event: Dict[str, Any]) -> Dict[str, str]:
+async def handle_product_event(event: Dict[str, Any]) -> Response:
     print(f"Received product event: {event}")
-    return {"status": "received", "event": "product"}
+    return Response(status_code=204)

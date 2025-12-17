@@ -29,7 +29,7 @@ spec:
           ports:
             - containerPort: 8000
           env:
-            - name: PUBSUB_NAME
+            - name: DAPR_PUBSUB_NAME
               value: sns-sqs-pubsub
 ---
 apiVersion: v1

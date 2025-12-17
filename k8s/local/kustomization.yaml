@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: introspect
+resources:
+  - ../base
+  - ./product-service.yaml
+  - ./order-service.yaml
+  - ../../dapr/components/redis-pubsub.yaml

@@ -12,6 +12,11 @@ This folder provisions VPC, EKS (IRSA-enabled), ECR repos, and IAM policy/roles 
 - `cluster_name` (cl-01)
 - `create_irsa_roles` (false) — set true in a new/empty account.
 - `sns_sqs_policy_arn` (empty) — leave empty to have TF create the policy from `../infra/iam-policies/sns-sqs-pubsub-policy.json`.
+- `create_pubsub_infra` (true) — create the SNS topic + SQS queue used by the Dapr `pubsub.aws.snssqs` component.
+- `pubsub_topic_name` (product-events) — must match what your apps publish/subscribe to (for example `DAPR_PUBSUB_TOPIC=product-events`).
+- `pubsub_queue_name` (order-service) — for `pubsub.aws.snssqs`, the SQS queue name is the runtime `consumerID` (normally the Dapr app-id). In this repo the subscriber is `order-service`.
+- `pubsub_queue_message_retention_seconds` (1209600) — must match the existing queue if one already exists.
+- `pubsub_queue_visibility_timeout_seconds` (30) — must match the existing queue if one already exists.
 - `cluster_access_entries` (empty) — optional list of IAM principals and EKS access policy ARNs to manage cluster access entries.
 - `add_current_caller_access` (false) — when true, auto-grant the current AWS caller the policies in `current_caller_policy_arns` as an access entry.
 - `current_caller_policy_arns` (Admin/ClusterAdmin/View) — policies applied when `add_current_caller_access` is true.
@@ -87,6 +92,11 @@ aws ecr get-login-password --region <region> | docker login --username AWS --pas
 kubectl apply -k ../k8s/base
 kustomize build ../k8s/aws --load-restrictor=LoadRestrictionsNone | kubectl apply -f -
 ```
+
+### Pub/Sub resources
+Because the Dapr component sets `disableEntityManagement: "true"`, the SNS topic + SQS queue must exist.
+Terraform will create them by default (names: `product-events` and `order-service`).
+If you already created them manually, set `create_pubsub_infra=false` to avoid name conflicts.
 
 ## Cleanup
 ```pwsh
