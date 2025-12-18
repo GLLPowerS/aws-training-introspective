@@ -19,7 +19,7 @@ async def health() -> Dict[str, str]:
 
 @app.post("/products")
 async def publish_product(payload: Dict[str, Any]) -> Dict[str, str]:
-    publish_url = f"{DAPR_BASE_URL}/publish/{PUBSUB_NAME}/{TOPIC}"
+    publish_url: str = f"{DAPR_BASE_URL}/publish/{PUBSUB_NAME}/{TOPIC}"
     async with httpx.AsyncClient() as client:
         resp = await client.post(publish_url, json=payload)
         if resp.is_error:
